@@ -1,9 +1,9 @@
 # Homepage (Root path)
 # 
-enable :sessions
+# enable :sessions...already enabled in environment
 
-
-
+# need a helper to verify the user instead of looping through each time
+# called within the gets
 helpers do
   def login?
     if session[:username].nil?
@@ -19,42 +19,51 @@ helpers do
 
 end
 
-
 get '/' do
   erb :index
 end
 
-post '/login' do
+# search username and password to match the @user
+# session will match the username
+post '/' do
   @user = User.where(username: params[:username],
     password: params[:password])
     session[:username] = @user
 end
 
+# if the username value is nil, then they are logged out
+# and redirect to '/'
 get '/logout' do
   session[:username] = nil
+# session.clear...removes everything from the hash
   redirect '/'
 end
 
-get '/signup' do
-  erb :signup
+# needs the form inputed
+get '/songs/signup' do
+  erb :'songs/signup'
 end
 
-post '/signup' do
+# new user has a username and password which is saved
+# redirected to songs where they can then post songs etc.
+post '/songs/signup' do
   @user = User.new(
     username: params[:username],
     password: params[:password]
-    )
+  )
     @user.save
-    redirect '/'
+    redirect '/songs'
 end
 
+# if on the session the username isn't nil, songs is ok
+# else redirected to index
 get '/songs' do
   @songs = Song.all
-  if !session[:username].nil?
-    erb :'songs'
-  else
-    redirect '/'
-  end
+  # if !session[:username].nil?
+    erb :'songs/index'
+  # else
+  #   redirect '/'
+  # end
 end
 
 get '/songs/new' do
@@ -62,13 +71,13 @@ get '/songs/new' do
   erb :'songs/new'
 end
 
-post '/songs' do
+# 
+post '/songs/new' do
   @song = Song.new(
     title:  params[:title],
     author: params[:author],
     url:    params[:url]
   )
-
   @song.save
   redirect '/songs'
 end
