@@ -1,9 +1,9 @@
 <h1>All Songs</h1>
 <hr/>
 
-<% @songs.each do |song| %>
+<% @song.each do |song| %>
   <div class="songs">
-    <h3><%= song.title %> <small>(by: <%= song.author %>)</small></h3>
+    <h3><a href="/songs/<%= song.id %>"><%= song.title %></a> <small>(by: <%= song.author %>)</small></h3>
     <p>
       <%= song.url %>
     </p>
@@ -12,8 +12,12 @@
 
 <hr/>
 
-<!-- <button type="button" class="btn btn-default btn-lg">
+<button type="button" class="btn btn-default btn-lg">
+  <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> 
+  <a href="/logout">Logout</a>
+</button>
+<button type="button" class="btn btn-default btn-lg">
   <span class="glyphicon glyphicon-music" aria-hidden="true"></span> 
   <a href="/songs/new">Put Up A New Song!</a>
-</button> -->
+</button>
 
